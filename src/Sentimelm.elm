@@ -189,6 +189,8 @@ headerStyle =
 inputStyle : List ( String, String )
 inputStyle =
     [ ( "width", "40vw" )
+    , ( "max-height", "50vh" )
+    , ( "overflow", "scroll" )
     , ( "margin", "0 auto" )
     , ( "padding", "0.5rem" )
     , ( "background-color", "rgba(255, 255, 255, 0.1)" )
