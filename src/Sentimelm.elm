@@ -63,7 +63,8 @@ scoreForWords text =
 
 scoreForWord : String -> Int
 scoreForWord word =
-    Maybe.withDefault 0 (Dict.get word Afinn.dict)
+    Dict.get word Afinn.dict
+        |> Maybe.withDefault 0
 
 
 
@@ -81,7 +82,7 @@ view model =
             ]
             []
         , div [ style radioGroupStyle ]
-            [ label [ style labelStyle ]
+            [ label []
                 [ input
                     [ style radioStyle
                     , type_ "radio"
@@ -91,7 +92,7 @@ view model =
                     []
                 , text "Negative"
                 ]
-            , label [ style labelStyle ]
+            , label []
                 [ input
                     [ style radioStyle
                     , type_ "radio"
@@ -101,7 +102,7 @@ view model =
                     []
                 , text "Neutral"
                 ]
-            , label [ style labelStyle ]
+            , label []
                 [ input
                     [ style radioStyle
                     , type_ "radio"
@@ -120,27 +121,23 @@ shouldBeChecked : Sentiment -> Int -> Bool
 shouldBeChecked sentiment score =
     case sentiment of
         Negative ->
-            if isNegative score then
-                True
-            else
-                False
+            isNegative score
 
         Neutral ->
-            if not (isNegative score) && not (isPositive score) then
-                True
-            else
-                False
+            isNeutral score
 
         Positive ->
-            if isPositive score then
-                True
-            else
-                False
+            isPositive score
 
 
 isNegative : Int -> Bool
 isNegative score =
     score < 0
+
+
+isNeutral : Int -> Bool
+isNeutral score =
+    not (isNegative score) && not (isPositive score)
 
 
 isPositive : Int -> Bool
@@ -195,11 +192,6 @@ radioGroupStyle =
     , ( "display", "flex" )
     , ( "justify-content", "space-around" )
     ]
-
-
-labelStyle : List ( String, String )
-labelStyle =
-    []
 
 
 radioStyle : List ( String, String )
