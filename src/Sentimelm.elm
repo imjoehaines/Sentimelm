@@ -60,12 +60,7 @@ scoreForWords text =
 
 scoreForWord : String -> Int
 scoreForWord word =
-    case Dict.get word Afinn.dict of
-        Just score ->
-            score
-
-        Nothing ->
-            0
+    Maybe.withDefault 0 (Dict.get word Afinn.dict)
 
 
 
