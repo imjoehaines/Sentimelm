@@ -22,8 +22,7 @@ main =
 
 
 type alias Model =
-    { input : String
-    , score : Int
+    { score : Int
     }
 
 
@@ -35,8 +34,7 @@ type Sentiment
 
 model : Model
 model =
-    { input = ""
-    , score = 0
+    { score = 0
     }
 
 
@@ -52,10 +50,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Input text ->
-            { model
-                | score = scoreForWords text
-                , input = text
-            }
+            { model | score = scoreForWords text }
 
 
 scoreForWords : String -> Int
