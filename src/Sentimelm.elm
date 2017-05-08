@@ -4,7 +4,7 @@ import Dict
 import Afinn
 import Html exposing (Html, main_, div, text, h1, p, button, input, label)
 import Html.Events exposing (on, onClick)
-import Html.Attributes exposing (style, property, contenteditable, name, type_, checked)
+import Html.Attributes exposing (style, property, contenteditable, name, type_, checked, disabled, class)
 import Json.Decode exposing (at, string)
 
 
@@ -24,6 +24,7 @@ main =
 
 type alias Model =
     { score : Int
+    , input : String
     , maybeOverride : Maybe Sentiment
     }
 
@@ -37,6 +38,7 @@ type Sentiment
 model : Model
 model =
     { score = 0
+    , input = ""
     , maybeOverride = Nothing
     }
 
@@ -70,6 +72,7 @@ update msg model =
         Input text ->
             ( { model
                 | score = scoreForWords text
+                , input = text
                 , maybeOverride = Nothing
               }
             , Cmd.none
@@ -103,19 +106,18 @@ scoreForWord word =
 
 view : Model -> Html Msg
 view model =
-    main_ [ style mainStyle ]
-        [ h1 [ style headerStyle ] [ text "Sprint Mailbox" ]
+    main_ []
+        [ h1 [] [ text "Sprint Mailbox" ]
         , div
-            [ style inputStyle
+            [ class "input"
             , contenteditable True
             , on "input" (Json.Decode.map Input textContentDecoder)
             ]
             []
-        , div [ style radioGroupStyle ]
+        , div [ class "radio-group" ]
             [ label []
                 [ input
-                    [ style radioStyle
-                    , type_ "radio"
+                    [ type_ "radio"
                     , name "sentiment"
                     , onClick (Override Negative)
                     , checked (shouldBeChecked Negative model.score)
@@ -125,8 +127,7 @@ view model =
                 ]
             , label []
                 [ input
-                    [ style radioStyle
-                    , type_ "radio"
+                    [ type_ "radio"
                     , name "sentiment"
                     , onClick (Override Neutral)
                     , checked (shouldBeChecked Neutral model.score)
@@ -136,8 +137,7 @@ view model =
                 ]
             , label []
                 [ input
-                    [ style radioStyle
-                    , type_ "radio"
+                    [ type_ "radio"
                     , name "sentiment"
                     , onClick (Override Positive)
                     , checked (shouldBeChecked Positive model.score)
@@ -146,7 +146,7 @@ view model =
                 , text "Positive"
                 ]
             ]
-        , button [ style buttonStyle ] [ text "Save" ]
+        , button [ disabled (shouldBeDisabled model) ] [ text "Save" ]
         ]
 
 
@@ -183,65 +183,6 @@ textContentDecoder =
     at [ "target", "textContent" ] string
 
 
-mainStyle : List ( String, String )
-mainStyle =
-    [ ( "width", "100vw" )
-    , ( "height", "100vh" )
-    , ( "background-color", "rgb(40, 40, 60)" )
-    , ( "display", "flex" )
-    , ( "flex-direction", "column" )
-    , ( "align-items", "center" )
-    , ( "justify-content", "center" )
-    , ( "color", "rgb(255, 255, 255)" )
-    , ( "font-family", "Helvetica, Arial, sans-serif" )
-    ]
-
-
-headerStyle : List ( String, String )
-headerStyle =
-    [ ( "text-align", "center" )
-    , ( "font-weight", "200" )
-    ]
-
-
-inputStyle : List ( String, String )
-inputStyle =
-    [ ( "width", "40vw" )
-    , ( "max-height", "50vh" )
-    , ( "overflow", "scroll" )
-    , ( "margin", "0 auto" )
-    , ( "padding", "0.5rem" )
-    , ( "background-color", "rgba(255, 255, 255, 0.1)" )
-    , ( "border", "thin solid rgba(255, 255, 255, 0.2)" )
-    , ( "font-size", "1.5rem" )
-    , ( "color", "rgb(255, 255, 255)" )
-    , ( "box-sizing", "border-box" )
-    ]
-
-
-radioGroupStyle : List ( String, String )
-radioGroupStyle =
-    [ ( "width", "40vw" )
-    , ( "margin", "1rem auto" )
-    , ( "font-size", "1.25rem" )
-    , ( "display", "flex" )
-    , ( "justify-content", "space-around" )
-    ]
-
-
-radioStyle : List ( String, String )
-radioStyle =
-    [ ( "vertical-align", "text-top" ) ]
-
-
-buttonStyle : List ( String, String )
-buttonStyle =
-    [ ( "width", "40vw" )
-    , ( "margin", "0 auto" )
-    , ( "padding", "0.5rem" )
-    , ( "background-color", "rgba(255, 255, 255, 0.2)" )
-    , ( "border", "thin solid rgba(255, 255, 255, 0.1)" )
-    , ( "font-size", "1.5rem" )
-    , ( "color", "rgb(255, 255, 255)" )
-    , ( "cursor", "pointer" )
-    ]
+shouldBeDisabled : Model -> Bool
+shouldBeDisabled model =
+    String.trim model.input == ""

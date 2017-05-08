@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(40, 40, 60);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 200;
+}
+
+.input {
+  width: 40vw;
+  max-height: 50vh;
+  overflow: scroll;
+  margin: 0 auto;
+  padding: .5rem;
+  background-color: rgba(255, 255, 255, .1);
+  border: thin solid rgba(255, 255, 255, .2);
+  font-size: 1.5rem;
+  color: rgb(255, 255, 255);
+  box-sizing: border-box;
+}
+
+.radio-group {
+  width: 40vw;
+  margin: 1rem auto;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+input[type='radio'] {
+  vertical-align: text-top;
+}
+
+button {
+  width: 40vw;
+  margin: 0 auto;
+  padding: .5rem;
+  background-color: rgba(255, 255, 255, .2);
+  border: thin solid rgba(255, 255, 255, .1);
+  font-size: 1.5rem;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: .3;
+}
