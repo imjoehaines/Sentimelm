@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "elm-live": "^2.7.4"
+  },
+  "scripts": {
+    "build": "elm-make src/Sentimelm.elm --output=build/main.js",
+    "watch": "elm-live src/Sentimelm.elm --output=build/main.js --dir=build"
+  }
+}
