@@ -10,10 +10,11 @@ import Json.Decode exposing (at, string)
 
 main : Program Never Model Msg
 main =
-    Html.beginnerProgram
-        { model = model
+    Html.program
+        { subscriptions = subscriptions
         , view = view
         , update = update
+        , init = init
         }
 
 
@@ -38,6 +39,20 @@ model =
     }
 
 
+init : ( Model, Cmd Msg )
+init =
+    ( { score = 0 }, Cmd.none )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
 
 -- UPDATE
 
@@ -46,11 +61,11 @@ type Msg
     = Input String
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Input text ->
-            { model | score = scoreForWords text }
+            ( { model | score = scoreForWords text }, Cmd.none )
 
 
 scoreForWords : String -> Int
