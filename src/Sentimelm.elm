@@ -3,7 +3,7 @@ module Main exposing (..)
 import Dict
 import Afinn
 import Html exposing (Html, main_, div, text, h1, p, button, input, label)
-import Html.Events exposing (on)
+import Html.Events exposing (on, onClick)
 import Html.Attributes exposing (style, property, contenteditable, name, type_, checked)
 import Json.Decode exposing (at, string)
 
@@ -24,6 +24,7 @@ main =
 
 type alias Model =
     { score : Int
+    , maybeOverride : Maybe Sentiment
     }
 
 
@@ -36,12 +37,13 @@ type Sentiment
 model : Model
 model =
     { score = 0
+    , maybeOverride = Nothing
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { score = 0 }, Cmd.none )
+    ( model, Cmd.none )
 
 
 
@@ -59,13 +61,26 @@ subscriptions model =
 
 type Msg
     = Input String
+    | Override Sentiment
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Input text ->
-            ( { model | score = scoreForWords text }, Cmd.none )
+            ( { model
+                | score = scoreForWords text
+                , maybeOverride = Nothing
+              }
+            , Cmd.none
+            )
+
+        Override sentiment ->
+            ( { model
+                | maybeOverride = Just sentiment
+              }
+            , Cmd.none
+            )
 
 
 scoreForWords : String -> Int
@@ -102,6 +117,7 @@ view model =
                     [ style radioStyle
                     , type_ "radio"
                     , name "sentiment"
+                    , onClick (Override Negative)
                     , checked (shouldBeChecked Negative model.score)
                     ]
                     []
@@ -112,6 +128,7 @@ view model =
                     [ style radioStyle
                     , type_ "radio"
                     , name "sentiment"
+                    , onClick (Override Neutral)
                     , checked (shouldBeChecked Neutral model.score)
                     ]
                     []
@@ -122,6 +139,7 @@ view model =
                     [ style radioStyle
                     , type_ "radio"
                     , name "sentiment"
+                    , onClick (Override Positive)
                     , checked (shouldBeChecked Positive model.score)
                     ]
                     []
