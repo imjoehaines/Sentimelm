@@ -125,29 +125,11 @@ view model =
 activeClass : Model -> Sentiment -> String
 activeClass model sentiment =
     case model.maybeOverride of
-        Just Negative ->
-            case sentiment of
-                Negative ->
-                    "active"
-
-                _ ->
-                    ""
-
-        Just Positive ->
-            case sentiment of
-                Positive ->
-                    "active"
-
-                _ ->
-                    ""
-
-        Just Neutral ->
-            case sentiment of
-                Neutral ->
-                    "active"
-
-                _ ->
-                    ""
+        Just override ->
+            if override == sentiment then
+                "active"
+            else
+                ""
 
         Nothing ->
             case sentiment of
