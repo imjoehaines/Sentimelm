@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 }
@@ -10,7 +14,6 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgb(255, 255, 255);
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -20,25 +23,16 @@ h1 {
 }
 
 textarea {
-  width: 40vw;
   height: 25vh;
   margin: 0 auto;
   padding: .5rem;
   hyphens: auto;
-  background-color: transparent;
-  border: thin solid  rgba(255, 255, 255, .1);
-  font-size: 1.25rem;
-  color: rgb(255, 255, 255);
-  box-sizing: border-box;
+  border: thin solid rgba(255, 255, 255, .1);
   resize: none;
-  font-weight: lighter;
-  transition: all 200ms;
 }
 
 .labels {
-  width: 40vw;
   margin: 1rem auto;
-  font-size: 1.25rem;
   display: flex;
   justify-content: space-around;
 }
@@ -48,30 +42,15 @@ textarea {
 }
 
 button {
-  width: 40vw;
   margin: 0 auto;
   padding: .5rem;
   background-color: rgba(255, 255, 255, .1);
   border: 1px solid transparent;
-  font-size: 1.25rem;
-  color: rgb(255, 255, 255);
   cursor: pointer;
-  transition: all 200ms;
-  font-weight: lighter;
 }
 
 button:hover:not([disabled]) {
   background-color: rgba(255, 255, 255, .15);
-}
-
-button:active {
-  background-color: transparent;
-}
-
-button:focus,
-textarea:focus {
-  border-color: #4ecdc4;
-  outline: none;
 }
 
 button[disabled] {
@@ -82,5 +61,35 @@ button[disabled] {
 .active {
   color: #4ecdc4;
   border-bottom-color: #4ecdc4;
+}
+
+main,
+button,
+textarea {
+  color: rgb(255, 255, 255);
+}
+
+.labels,
+button,
+textarea {
+  width: 40vw;
+  font-size: 1.25rem;
+}
+
+button,
+textarea {
+  transition: all 200ms;
+  font-weight: lighter;
+}
+
+.active,
+textarea,
+button:active {
   background-color: transparent;
+}
+
+button:focus,
+textarea:focus {
+  border-color: #4ecdc4;
+  outline: none;
 }
