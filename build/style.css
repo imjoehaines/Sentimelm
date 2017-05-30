@@ -16,59 +16,71 @@ main {
 
 h1 {
   text-align: center;
-  font-weight: 200;
+  font-weight: lighter;
 }
 
-.input {
+textarea {
   width: 40vw;
-  max-height: 50vh;
-  overflow: scroll;
+  height: 25vh;
   margin: 0 auto;
   padding: .5rem;
-  background-color: rgba(255, 255, 255, .1);
-  border: thin solid rgba(255, 255, 255, .2);
-  font-size: 1.5rem;
+  hyphens: auto;
+  background-color: transparent;
+  border: thin solid  rgba(255, 255, 255, .1);
+  font-size: 1.25rem;
   color: rgb(255, 255, 255);
   box-sizing: border-box;
+  resize: none;
+  font-weight: lighter;
+  transition: all 200ms;
 }
 
-.range-labels {
+.labels {
   width: 40vw;
-  margin: 1rem auto .5rem;
+  margin: 1rem auto;
   font-size: 1.25rem;
   display: flex;
   justify-content: space-around;
 }
 
-.range-labels p {
-  margin: 0;
-}
-
-.range-labels .active {
-  color: #4ecdc4;
-}
-
-.range-container {
-  width: 40vw;
-  margin-bottom: 1rem;
-}
-
-.range {
-  width: 100%;
+.labels button:nth-of-type(2) {
+  margin: 0 1rem;
 }
 
 button {
   width: 40vw;
   margin: 0 auto;
   padding: .5rem;
-  background-color: rgba(255, 255, 255, .2);
-  border: thin solid rgba(255, 255, 255, .1);
-  font-size: 1.5rem;
+  background-color: rgba(255, 255, 255, .1);
+  border: 1px solid transparent;
+  font-size: 1.25rem;
   color: rgb(255, 255, 255);
   cursor: pointer;
+  transition: all 200ms;
+  font-weight: lighter;
+}
+
+button:hover:not([disabled]) {
+  background-color: rgba(255, 255, 255, .15);
+}
+
+button:active {
+  background-color: transparent;
+}
+
+button:focus,
+textarea:focus {
+  border-color: #4ecdc4;
+  outline: none;
 }
 
 button[disabled] {
   cursor: not-allowed;
   opacity: .3;
+}
+
+.active {
+  color: #4ecdc4;
+  border-bottom-color: #4ecdc4;
+  background-color: transparent;
 }

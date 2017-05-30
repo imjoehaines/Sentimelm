@@ -2,9 +2,9 @@ module Main exposing (..)
 
 import Dict
 import Afinn
-import Html exposing (Html, main_, div, text, h1, p, button, input, label)
-import Html.Events exposing (on, onInput)
-import Html.Attributes exposing (style, property, contenteditable, name, type_, checked, disabled, class, value)
+import Html exposing (Html, main_, div, text, h1, p, button, textarea, label)
+import Html.Events exposing (on, onClick, onInput)
+import Html.Attributes exposing (placeholder, disabled, class)
 import Json.Decode exposing (at, string)
 
 
@@ -108,60 +108,18 @@ view : Model -> Html Msg
 view model =
     main_ []
         [ h1 [] [ text "Sprint Mailbox" ]
-        , div
-            [ class "input"
-            , contenteditable True
-            , on "input" (Json.Decode.map Input textContentDecoder)
+        , textarea
+            [ onInput Input
+            , placeholder "…"
             ]
             []
-        , div [ class "range-labels" ]
-            [ p [ class (activeClass model Negative) ] [ text "Negative" ]
-            , p [ class (activeClass model Neutral) ] [ text "Neutral" ]
-            , p [ class (activeClass model Positive) ] [ text "Positive" ]
-            ]
-        , div [ class "range-container" ]
-            [ input
-                [ type_ "range"
-                , class "range"
-                , Html.Attributes.min "-10"
-                , Html.Attributes.max "10"
-                , value (sliderValue model)
-                , onInput (sliderChange)
-                ]
-                []
+        , div [ class "labels" ]
+            [ button [ class (activeClass model Negative), onClick (Override Negative) ] [ text "Negative" ]
+            , button [ class (activeClass model Neutral), onClick (Override Neutral) ] [ text "Neutral" ]
+            , button [ class (activeClass model Positive), onClick (Override Positive) ] [ text "Positive" ]
             ]
         , button [ disabled (shouldBeDisabled model) ] [ text "Save" ]
         ]
-
-
-sliderValue : Model -> String
-sliderValue model =
-    case model.maybeOverride of
-        Just Negative ->
-            "-7"
-
-        Just Positive ->
-            "7"
-
-        Just Neutral ->
-            "0"
-
-        _ ->
-            toString model.score
-
-
-sliderChange : String -> Msg
-sliderChange value =
-    let
-        intValue =
-            Result.withDefault 0 (String.toInt value)
-    in
-        if isNegative intValue then
-            Override Negative
-        else if isPositive intValue then
-            Override Positive
-        else
-            Override Neutral
 
 
 activeClass : Model -> Sentiment -> String
@@ -191,7 +149,7 @@ activeClass model sentiment =
                 _ ->
                     ""
 
-        _ ->
+        Nothing ->
             case sentiment of
                 Negative ->
                     if isNegative model.score then
