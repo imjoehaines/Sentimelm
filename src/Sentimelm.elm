@@ -3,8 +3,8 @@ module Main exposing (..)
 import Dict
 import Afinn
 import Html exposing (Html, main_, div, text, h1, p, button, input, label)
-import Html.Events exposing (on, onClick)
-import Html.Attributes exposing (style, property, contenteditable, name, type_, checked, disabled, class)
+import Html.Events exposing (on, onInput)
+import Html.Attributes exposing (style, property, contenteditable, name, type_, checked, disabled, class, value)
 import Json.Decode exposing (at, string)
 
 
@@ -114,53 +114,102 @@ view model =
             , on "input" (Json.Decode.map Input textContentDecoder)
             ]
             []
-        , div [ class "radio-group" ]
-            [ label []
-                [ input
-                    [ type_ "radio"
-                    , name "sentiment"
-                    , onClick (Override Negative)
-                    , checked (shouldBeChecked Negative model.score)
-                    ]
-                    []
-                , text "Negative"
+        , div [ class "range-labels" ]
+            [ p [ class (activeClass model Negative) ] [ text "Negative" ]
+            , p [ class (activeClass model Neutral) ] [ text "Neutral" ]
+            , p [ class (activeClass model Positive) ] [ text "Positive" ]
+            ]
+        , div [ class "range-container" ]
+            [ input
+                [ type_ "range"
+                , class "range"
+                , Html.Attributes.min "-10"
+                , Html.Attributes.max "10"
+                , value (sliderValue model)
+                , onInput (sliderChange)
                 ]
-            , label []
-                [ input
-                    [ type_ "radio"
-                    , name "sentiment"
-                    , onClick (Override Neutral)
-                    , checked (shouldBeChecked Neutral model.score)
-                    ]
-                    []
-                , text "Neutral"
-                ]
-            , label []
-                [ input
-                    [ type_ "radio"
-                    , name "sentiment"
-                    , onClick (Override Positive)
-                    , checked (shouldBeChecked Positive model.score)
-                    ]
-                    []
-                , text "Positive"
-                ]
+                []
             ]
         , button [ disabled (shouldBeDisabled model) ] [ text "Save" ]
         ]
 
 
-shouldBeChecked : Sentiment -> Int -> Bool
-shouldBeChecked sentiment score =
-    case sentiment of
-        Negative ->
-            isNegative score
+sliderValue : Model -> String
+sliderValue model =
+    case model.maybeOverride of
+        Just Negative ->
+            "-7"
 
-        Neutral ->
-            isNeutral score
+        Just Positive ->
+            "7"
 
-        Positive ->
-            isPositive score
+        Just Neutral ->
+            "0"
+
+        _ ->
+            toString model.score
+
+
+sliderChange : String -> Msg
+sliderChange value =
+    let
+        intValue =
+            Result.withDefault 0 (String.toInt value)
+    in
+        if isNegative intValue then
+            Override Negative
+        else if isPositive intValue then
+            Override Positive
+        else
+            Override Neutral
+
+
+activeClass : Model -> Sentiment -> String
+activeClass model sentiment =
+    case model.maybeOverride of
+        Just Negative ->
+            case sentiment of
+                Negative ->
+                    "active"
+
+                _ ->
+                    ""
+
+        Just Positive ->
+            case sentiment of
+                Positive ->
+                    "active"
+
+                _ ->
+                    ""
+
+        Just Neutral ->
+            case sentiment of
+                Neutral ->
+                    "active"
+
+                _ ->
+                    ""
+
+        _ ->
+            case sentiment of
+                Negative ->
+                    if isNegative model.score then
+                        "active"
+                    else
+                        ""
+
+                Neutral ->
+                    if isNeutral model.score then
+                        "active"
+                    else
+                        ""
+
+                Positive ->
+                    if isPositive model.score then
+                        "active"
+                    else
+                        ""
 
 
 isNegative : Int -> Bool

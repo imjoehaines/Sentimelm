@@ -32,16 +32,29 @@ h1 {
   box-sizing: border-box;
 }
 
-.radio-group {
+.range-labels {
   width: 40vw;
-  margin: 1rem auto;
+  margin: 1rem auto .5rem;
   font-size: 1.25rem;
   display: flex;
   justify-content: space-around;
 }
 
-input[type='radio'] {
-  vertical-align: text-top;
+.range-labels p {
+  margin: 0;
+}
+
+.range-labels .active {
+  color: #4ecdc4;
+}
+
+.range-container {
+  width: 40vw;
+  margin-bottom: 1rem;
+}
+
+.range {
+  width: 100%;
 }
 
 button {
