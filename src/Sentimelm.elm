@@ -5,7 +5,6 @@ import Afinn
 import Html exposing (Html, main_, div, text, h1, p, button, textarea, label)
 import Html.Events exposing (on, onClick, onInput)
 import Html.Attributes exposing (placeholder, disabled, class)
-import Json.Decode exposing (at, string)
 
 
 main : Program Never Model Msg
@@ -70,10 +69,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Input text ->
-            ( { model
-                | score = scoreForWords text
-                , input = text
-                , maybeOverride = Nothing
+            ( { score = scoreForWords text
+              , input = text
+              , maybeOverride = Nothing
               }
             , Cmd.none
             )
@@ -109,11 +107,7 @@ view model =
     main_ []
         [ h1 [] [ text "Sprint Mailbox" ]
         , div [ class "input-container" ]
-            [ textarea
-                [ onInput Input
-                , placeholder "…"
-                ]
-                []
+            [ textarea [ onInput Input, placeholder "…" ] [ text model.input ]
             , p [ class "score-count" ] [ text (toString model.score) ]
             ]
         , div [ class "labels" ]
@@ -121,7 +115,7 @@ view model =
             , button [ class (activeClass model Neutral), onClick (Override Neutral) ] [ text "Neutral" ]
             , button [ class (activeClass model Positive), onClick (Override Positive) ] [ text "Positive" ]
             ]
-        , button [ disabled (shouldBeDisabled model) ] [ text "Save" ]
+        , button [ disabled (shouldBeDisabled model.input) ] [ text "Save" ]
         ]
 
 
@@ -170,11 +164,6 @@ isPositive score =
     score > 0
 
 
-textContentDecoder : Json.Decode.Decoder String
-textContentDecoder =
-    at [ "target", "textContent" ] string
-
-
-shouldBeDisabled : Model -> Bool
-shouldBeDisabled model =
-    String.trim model.input == "" || String.length model.input < 5
+shouldBeDisabled : String -> Bool
+shouldBeDisabled text =
+    String.trim text == "" || String.length text < 5
