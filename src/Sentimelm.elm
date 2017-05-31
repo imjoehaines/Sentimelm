@@ -108,11 +108,14 @@ view : Model -> Html Msg
 view model =
     main_ []
         [ h1 [] [ text "Sprint Mailbox" ]
-        , textarea
-            [ onInput Input
-            , placeholder "…"
+        , div [ class "input-container" ]
+            [ textarea
+                [ onInput Input
+                , placeholder "…"
+                ]
+                []
+            , p [ class "score-count" ] [ text (toString model.score) ]
             ]
-            []
         , div [ class "labels" ]
             [ button [ class (activeClass model Negative), onClick (Override Negative) ] [ text "Negative" ]
             , button [ class (activeClass model Neutral), onClick (Override Neutral) ] [ text "Neutral" ]
@@ -174,4 +177,4 @@ textContentDecoder =
 
 shouldBeDisabled : Model -> Bool
 shouldBeDisabled model =
-    String.trim model.input == ""
+    String.trim model.input == "" || String.length model.input < 5

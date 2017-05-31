@@ -23,7 +23,6 @@ h1 {
 }
 
 textarea {
-  height: 25vh;
   margin: 0 auto;
   padding: .5rem;
   hyphens: auto;
@@ -55,12 +54,38 @@ button:hover:not([disabled]) {
 
 button[disabled] {
   cursor: not-allowed;
-  opacity: .3;
 }
 
 .active {
   color: #4ecdc4;
   border-bottom-color: #4ecdc4;
+}
+
+.input-container {
+  position: relative;
+}
+
+.score-count {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  margin: 0;
+  padding: .2rem;
+  font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+}
+
+.hide {
+  display: none;
+}
+
+.score-count,
+button[disabled] {
+  opacity: .3;
+}
+
+textarea,
+.input-container {
+  height: 25vh;
 }
 
 main,
