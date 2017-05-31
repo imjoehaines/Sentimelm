@@ -71,6 +71,7 @@ button[disabled] {
   right: 1px;
   margin: 0;
   padding: .2rem;
+  pointer-events: none;
   font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 }
 
