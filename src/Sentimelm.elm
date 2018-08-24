@@ -1,15 +1,16 @@
-module Main exposing (..)
+module Main exposing (Model, Msg(..), Sentiment(..), activeClass, init, initialModel, isNegative, isNeutral, isPositive, main, scoreForWord, scoreForWords, shouldBeDisabled, subscriptions, update, view)
 
-import Dict
 import Afinn
-import Html exposing (Html, main_, div, text, h1, p, button, textarea, label)
+import Browser
+import Dict
+import Html exposing (Html, button, div, h1, label, main_, p, text, textarea)
+import Html.Attributes exposing (class, disabled, placeholder)
 import Html.Events exposing (on, onClick, onInput)
-import Html.Attributes exposing (placeholder, disabled, class)
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
+    Browser.element
         { subscriptions = subscriptions
         , view = view
         , update = update
@@ -34,17 +35,17 @@ type Sentiment
     | Positive
 
 
-model : Model
-model =
+initialModel : Model
+initialModel =
     { score = 0
     , input = ""
     , maybeOverride = Nothing
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( model, Cmd.none )
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( initialModel, Cmd.none )
 
 
 
@@ -108,7 +109,7 @@ view model =
         [ h1 [] [ text "Sprint Mailbox" ]
         , div [ class "input-container" ]
             [ textarea [ onInput Input, placeholder "…" ] [ text model.input ]
-            , p [ class "score-count" ] [ text (toString model.score) ]
+            , p [ class "score-count" ] [ text (String.fromInt model.score) ]
             ]
         , div [ class "labels" ]
             [ button [ class (activeClass model Negative), onClick (Override Negative) ] [ text "Negative" ]
@@ -125,6 +126,7 @@ activeClass model sentiment =
         Just override ->
             if override == sentiment then
                 "active"
+
             else
                 ""
 
@@ -133,18 +135,21 @@ activeClass model sentiment =
                 Negative ->
                     if isNegative model.score then
                         "active"
+
                     else
                         ""
 
                 Neutral ->
                     if isNeutral model.score then
                         "active"
+
                     else
                         ""
 
                 Positive ->
                     if isPositive model.score then
                         "active"
+
                     else
                         ""
 
