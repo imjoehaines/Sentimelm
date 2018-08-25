@@ -122,36 +122,34 @@ view model =
 
 activeClass : Model -> Sentiment -> String
 activeClass model sentiment =
-    case model.maybeOverride of
-        Just override ->
+    case ( model.maybeOverride, sentiment ) of
+        ( Just override, _ ) ->
             if override == sentiment then
                 "active"
 
             else
                 ""
 
-        Nothing ->
-            case sentiment of
-                Negative ->
-                    if isNegative model.score then
-                        "active"
+        ( _, Negative ) ->
+            if isNegative model.score then
+                "active"
 
-                    else
-                        ""
+            else
+                ""
 
-                Neutral ->
-                    if isNeutral model.score then
-                        "active"
+        ( _, Neutral ) ->
+            if isNeutral model.score then
+                "active"
 
-                    else
-                        ""
+            else
+                ""
 
-                Positive ->
-                    if isPositive model.score then
-                        "active"
+        ( _, Positive ) ->
+            if isPositive model.score then
+                "active"
 
-                    else
-                        ""
+            else
+                ""
 
 
 isNegative : Int -> Bool
